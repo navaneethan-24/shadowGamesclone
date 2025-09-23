@@ -11,18 +11,13 @@ export default function HeroCategory(){
             sx={{ display: {xs:"none", md:"flex" , flexWrap:"nowrap", overflowX :"hidden" }}}>
                 {productCategories.map((cat:Category) =>(
                   <GridItem key={cat.id} sx={{ flex:" 1 1 auto", minWidth:0}}>
-
                         <Box sx={{display:"flex",flexDirection:"column", cursor: "pointer", alignItems:"center", gap: 2}}>
                             <CardMedia component="img"
                             image={cat.image}
                             alt={cat.name}
                             sx={{ height: 35,objectFit:"contain", mb: 0 }}/>
-
                             <Typography variant="body1"  fontSize="14px"  sx= {{display:"flex",justifyContent:"center" , alignItems:"center", maxWidth: 100, minHeight: 50, mx:"auto" ,textAlign:"center"}}
                             >{cat.name}</Typography>
-                        
-                            
-
                         </Box>
  
                     </GridItem>

@@ -96,20 +96,14 @@ export default function TopSellings() {
 
       {/* Porduct cart */}
       <Box sx={{ position: "relative" }}>
-        {/* Left scroll button */}
+
         <Scrollbtn direction="left" onClick={scrollLeft} />
-
-        {/* Right scroll button */}
         <Scrollbtn direction="right" onClick={scrollRight} />
-
-        <Box
-          ref={scrollRef}
-          onScroll={checkLoop}
+        <Box ref={scrollRef} onScroll={checkLoop}
           sx={{
             display: "flex",
             overflowX: "auto",
             gap: 1.2,
-
             "&::-webkit-scrollbar": { height: 6 },
           }}
         >

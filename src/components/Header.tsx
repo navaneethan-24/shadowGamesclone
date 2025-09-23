@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  AppBar,
-  Box,
-  TextField,
-  Toolbar,
-  InputAdornment,
-  Typography,
-  IconButton,
-  Drawer,
-  ListItemButton,
-
-  OutlinedInput,
-} from "@mui/material";
+import {AppBar,Box,TextField,Toolbar,InputAdornment,Typography,IconButton,Drawer,ListItemButton,OutlinedInput,}from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
@@ -66,17 +54,14 @@ export default function Header() {
           }}
         >
           {/* Mobile Menu */}
-          <Box
-            sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}
-          >
-            <IconButton onClick={toggleDrawer} sx={{ color: "#fff",  mr: 10 }}>
+          <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
+            <IconButton onClick={toggleDrawer} sx={{ color: "#fff", mr: 10 }}>
               <MenuIcon />
             </IconButton>
           </Box>
 
           {/* Logo */}
-          <Box
-            sx={{
+          <Box sx={{
               position: { xs: "absolute", md: "static" },
               left: { xs: "50%", md: "unset" },
               transform: { xs: "translateX(-60%)", md: "none" },
@@ -242,7 +227,7 @@ export default function Header() {
           top: 83,
           left: 0,
           right: 0,
-          width: "100vw", 
+          width: "100vw",
           maxWidth: "100%",
           zIndex: (theme) => theme.zIndex.drawer + 1,
           justifyContent: "center",

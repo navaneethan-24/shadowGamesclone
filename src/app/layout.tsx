@@ -5,8 +5,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Box } from "@mui/material";
 import FloatingSocialIcons from "@/components/ui/FlotingSocialIcons";
-import PageLoader from "@/components/ui/PageLoader";
-
 
 
 const geistSans = Geist({
@@ -34,11 +32,9 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header />
         <main>
-          
           <Box sx={{  minHeight: "100vh" }}>
-          <PageLoader>{children}</PageLoader>
-          </Box>
-          
+          {children}
+          </Box>    
         </main>
         <Footer />
         <FloatingSocialIcons/>

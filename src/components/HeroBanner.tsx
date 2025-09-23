@@ -35,10 +35,7 @@ export default function HeroBanner() {
         overflow: "hidden",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center",
-        bgcolor:" ",
-       
-
+        alignItems:"center", 
       }}
     >
       {/* Left button */}
@@ -59,16 +56,13 @@ export default function HeroBanner() {
             alignItems:"center"
           }}
         >
-      
-            {/* Slider track */}
             <Box
               sx={{
                 display: "flex",
                 width: `${herobannerImg.length * 100}%`,
                 height: "80%",
                 transform: `translateX(-${currentIndex * 100}%)`,
-                transition: "transform 0.6s ease",
-              
+                transition: "transform 0.6s ease", 
               }}
             >
               {herobannerImg.map((img, id) => (

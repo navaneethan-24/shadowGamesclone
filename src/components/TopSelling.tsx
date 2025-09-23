@@ -65,9 +65,7 @@ export default function TopSellings() {
         }}
       >
         <Box>
-          <Typography
-            fontWeight={800}
-            color="#019cfa"
+          <Typography fontWeight={800} color="#019cfa"
             sx={{
               fontSize: { xs: "18px", md: "24px" },
               color: "#019cfa",
@@ -96,20 +94,14 @@ export default function TopSellings() {
 
       {/* Porduct cart */}
       <Box sx={{ position: "relative" }}>
-        {/* Left scroll button */}
         <Scrollbtn direction="left" onClick={scrollLeft} />
-
-        {/* Right scroll button */}
         <Scrollbtn direction="right" onClick={scrollRight} />
 
-        <Box
-          ref={scrollRef}
-          onScroll={checkLoop}
+        <Box ref={scrollRef} onScroll={checkLoop}
           sx={{
             display: "flex",
             overflowX: "auto",
             gap: 1.2,
-
             "&::-webkit-scrollbar": { height: 6 },
           }}
         >

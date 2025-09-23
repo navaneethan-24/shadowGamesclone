@@ -28,8 +28,6 @@ export default function ProductCard({ product, width }: Props) {
         flexShrink: 0, 
         display:"flex",
         flexDirection:"column",
-  
-  
         "&:hover": {
           boxShadow:
             "2px 0 3px 0px #58565f66, -2px 0 3px 0px #58565f66, 0 2px 3px 0px #aeadb166",
