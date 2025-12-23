@@ -1,12 +1,10 @@
-import { createTheme } from '@mui/material/styles';
+// theme.ts
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-  palette: {
-    primary: { main: '#1976d2' },
-    secondary: { main: '#ff4081' },
-    background: { default: '#f5f5f5' },
+  typography: {
+    fontFamily: `'Poppins', 'Poppins Fallback', 'Roboto', 'Helvetica Neue', Arial, sans-serif`,
   },
-  typography: { fontFamily: 'Roboto, Arial' },
 });
 
 export default theme;

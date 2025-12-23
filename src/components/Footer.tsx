@@ -42,6 +42,7 @@ const Footer: React.FC = () => {
             alignItems: { xs: "flex-start", md: "center" },
             gap: {xs : 3 , sm : 4 , md: 4}  ,
             p:1,
+           
             
             
           }}
@@ -51,9 +52,13 @@ const Footer: React.FC = () => {
             sx={{
               display: "flex",
               flexDirection: "column",
+              alignItems:"center",
+              alignSelf: 'center',
               gap: 2,
               width:"100%",
-              maxWidth: { md: 400 },
+              flexGrow: 1,
+              maxWidth: { md: 440, xs: 360   },
+          
             }}
           >
             <Box
@@ -75,7 +80,7 @@ const Footer: React.FC = () => {
               />
             </Box>
             {/* Phone */}
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignSelf="flex-start" gap={2}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -96,7 +101,7 @@ const Footer: React.FC = () => {
               </Typography>
             </Box>
             {/* Email */}
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignSelf="flex-start" gap={2}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="23"
@@ -123,7 +128,7 @@ const Footer: React.FC = () => {
               </Link>
             </Box>
             {/* Location */}
-            <Box display="flex" alignItems="center" gap={1}>
+            <Box display="flex" alignSelf="flex-start" gap={2}>
               <Box display="flex" gap={1}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -156,6 +161,7 @@ const Footer: React.FC = () => {
               </Box>
             </Box>
           </Box>
+
           {/* About Links */}
           <Box
             sx={{
@@ -371,7 +377,7 @@ const Footer: React.FC = () => {
                 >
                   <path
                     fill="#009AFF"
-                    clip-path="url(#x_svg__a)"
+                    clipPath="url(#x_svg__a)"
                     d="M11.159 8.167 17.643.792h-1.536l-5.633 6.402L5.978.792H.792l6.8 9.683-6.8 7.733h1.536l5.945-6.763 4.749 6.763h5.186zM9.054 10.56l-.69-.965-5.482-7.67h2.36l4.425 6.192.688.965 5.751 8.048h-2.36z"
                   />
                   <defs>

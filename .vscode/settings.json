@@ -1,0 +1,10 @@
+{
+    "claudeCodeChat.permissions.yoloMode": true,
+    "editor.inlineSuggest.edits.showCollapsed": true,
+    "github.copilot.chat.alternateGptPrompt.enabled": true,
+    "github.copilot.advanced": {
+        
+    },
+    "liveServer.settings.multiRootWorkspaceName": "shadowgames",
+    "editor.suggest.shareSuggestSelections": true
+}

@@ -1,32 +1,55 @@
 "use client";
 
-import {AppBar,Box,TextField,Toolbar,InputAdornment,Typography,IconButton,Drawer,ListItemButton,OutlinedInput,}from "@mui/material";
+import { AppBar, Box, TextField, Toolbar, InputAdornment, Typography, IconButton, Drawer, ListItemButton, OutlinedInput, SvgIcon, } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HeroBtn } from "./ui/buttons";
-import Portal from "@mui/material/Portal";
+import { postData } from "@/utils/api";
+import { Badge } from "@mui/material";
+import { useCart } from "@/components/CartContext";
+import { useRouter } from "next/navigation";
+import type { Category, CartItem } from "@/types";
+
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-
   const toggleDrawer = () => setMobileOpen(!mobileOpen);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { cart } = useCart();
+  const router = useRouter();
 
-  const categories = [
-    { name: "Console", href: "#" },
-    { name: "Game CDs", href: "#" },
-    { name: "Accessories", href: "#" },
-    { name: "VR / AR", href: "#" },
-    { name: "Retro Game", href: "#" },
-    { name: "Gaming Posters", href: "#" },
-    { name: "Electronics", href: "#" },
-    { name: "Limited Time Deal", href: "#" },
-    { name: "Fashion", href: "#" },
-  ];
+  const cartCount = cart.reduce((sum: number, item: CartItem) => sum + item.qty, 0);
+
+  const getCategories = async () => {
+    try {
+      const result = await postData<{ items: any[] }>("categories/query", {
+        data: { filters: {} }
+      })
+
+      if (result.items) {
+        const mapped = result.items.map((cat) => ({
+          ...cat,
+        })).sort(
+          (a, b) => Number(a.displayOrder || 0) - Number(b.displayOrder || 0)
+        )
+        setCategories(mapped)
+      }
+    } catch (err) {
+      console.log("Failed to fecth categories:", err);
+
+    }
+  }
+
+  useEffect(() => {
+    getCategories();
+  }, [])
+
+
 
   return (
     <>
@@ -38,7 +61,7 @@ export default function Header() {
           background: "rgba(255, 255, 255, 0.05)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+          borderTop: "1px solid rgba(255, 255, 255, 0.61)",
           width: "100%",
           mb: "0",
         }}
@@ -55,6 +78,7 @@ export default function Header() {
         >
           {/* Mobile Menu */}
           <Box sx={{ display: { xs: "flex", md: "none" }, alignItems: "center" }}>
+
             <IconButton onClick={toggleDrawer} sx={{ color: "#fff", mr: 10 }}>
               <MenuIcon />
             </IconButton>
@@ -62,13 +86,13 @@ export default function Header() {
 
           {/* Logo */}
           <Box sx={{
-              position: { xs: "absolute", md: "static" },
-              left: { xs: "50%", md: "unset" },
-              transform: { xs: "translateX(-60%)", md: "none" },
-              display: "flex",
-              alignItems: "center",
-              flexGrow: { xs: 1, md: 0 },
-            }}
+            position: { xs: "absolute", md: "static" },
+            left: { xs: "50%", md: "unset" },
+            transform: { xs: "translateX(-60%)", md: "none" },
+            display: "flex",
+            alignItems: "center",
+            flexGrow: { xs: 1, md: 0 },
+          }}
           >
             <Link href="/" passHref>
               <Box
@@ -77,7 +101,7 @@ export default function Header() {
                   alignItems: "center",
                   justifyContent: "center",
                   cursor: "pointer",
-                  width: { xs: 250, md: 287 },
+                  width: { xs: 220, md: 287 },
                 }}
               >
                 <Image
@@ -117,11 +141,12 @@ export default function Header() {
                   fontSize: "16px",
                 },
               }}
-              slots={{ input: OutlinedInput }}
+
               slotProps={{
                 input: {
                   type: "text",
                   "aria-label": "search",
+                  className: "font-400 text-13 text-white",
                   endAdornment: (
                     <InputAdornment position="end">
                       <SearchIcon sx={{ color: "#626263" }} />
@@ -138,54 +163,38 @@ export default function Header() {
               display: { xs: "none", md: "flex" },
               alignItems: "center",
               gap: 2,
+        
             }}
           >
             <HeroBtn text="LOGIN" />
-            <IconButton
-              disableRipple
-              disableFocusRipple
-              sx={{
-                "&:focus": { outline: "none" },
-                "&:focus-visible": { outline: "none" },
-                "&:hover": { background: "transparent" },
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="38"
-                height="38"
-                viewBox="0 0 38 38"
+
+            <Link href="/cart" passHref>
+              <IconButton
+                disableRipple
+                disableFocusRipple
+
               >
-                <defs>
-                  <linearGradient
-                    id="cartGradient"
-                    x1="11.083"
-                    x2="58.557"
-                    y1="-38.5"
-                    y2="22.301"
-                    gradientUnits="userSpaceOnUse"
+                <Badge badgeContent={cartCount} color="error">
+                  <Box
+                    sx={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "radial-gradient(circle at top left, #862c47ff 5%, #07568e 90%)",
+
+                    
+                    }}
                   >
-                    <stop stopColor="red" />
-                    <stop offset="1" stopColor="#009AFF" />
-                  </linearGradient>
-                </defs>
-                <circle
-                  cx="19"
-                  cy="19"
-                  r="19"
-                  fill="url(#cartGradient)"
-                  fillOpacity="0.5"
-                />
-                <path
-                  fill="#fff"
-                  d="M15 21.7a.67.67 0 0 1-.67-.53l-1.56-7.85a2 2 0 0 0-1.96-1.61H9.68a.67.67 0 1 1 0-1.33h1.15a3.33 3.33 0 0 1 3.26 2.66l1.59 7.86a.67.67 0 0 1-.54.8zM15.67 26.37h-1.24a2.76 2.76 0 0 1-.25-5.5l12.26-1.11 1.07-5.37H13.67a.67.67 0 0 1 0-1.33h14.65c.2 0 .4.09.52.25.12.16.17.36.15.55l-1.33 6.66a.67.67 0 0 1-.59.53l-12.8 1.22a1.42 1.42 0 0 0 .13 2.84h1.24a.67.67 0 0 1 0 1.33z"
-                />
-                <path
-                  fill="#fff"
-                  d="M25.66 28.36a2.66 2.66 0 1 1 0-5.32 2.66 2.66 0 0 1 0 5.32zm0-3.99a1.33 1.33 0 1 0 0 2.66 1.33 1.33 0 0 0 0-2.66zM17.67 28.36a2.66 2.66 0 1 1 0-5.33 2.66 2.66 0 0 1 0 5.33zm0-3.99a1.33 1.33 0 1 0 0 2.66 1.33 1.33 0 0 0 0-2.66zM23.66 26.37h-4a.67.67 0 1 1 0-1.33h4a.67.67 0 1 1 0 1.33z"
-                />
-              </svg>
-            </IconButton>
+                    <ShoppingCartOutlinedIcon sx={{ color: "#fff", fontSize: 22 }} />
+                  </Box>
+
+
+                </Badge>
+              </IconButton>
+            </Link>
           </Box>
 
           {/* Mobile Actions */}
@@ -193,10 +202,11 @@ export default function Header() {
             sx={{
               display: { xs: "flex", md: "none" },
               alignItems: "center",
-              gap: 1,
+              p: 0,
+              
             }}
           >
-            <IconButton sx={{ color: "#e7ebee" }}>
+            <IconButton sx={{ color: "#e7ebee" ,  ml: 2 }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="34"
@@ -213,9 +223,34 @@ export default function Header() {
                 ></path>
               </svg>
             </IconButton>
-            <IconButton sx={{ color: "#e7ebee" }}>
-              <ShoppingCartOutlinedIcon />
-            </IconButton>
+
+            <Link href="/cart" passHref>
+              <IconButton
+                disableRipple
+                disableFocusRipple
+               
+
+              >
+                <Badge badgeContent={cartCount} color="error">
+                  <Box
+                    sx={{
+                      width: 38,
+                      height: 38,
+                      borderRadius: "50%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      p: 0,
+                      m: 0,
+                    }}
+                  >
+                    <ShoppingCartOutlinedIcon sx={{ color: "#fff", fontSize: 22 }} />
+                  </Box>
+
+
+                </Badge>
+              </IconButton>
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>
@@ -295,12 +330,11 @@ export default function Header() {
               <CloseIcon />
             </IconButton>
           </Box>
-
           {categories.map((cat) => (
             <ListItemButton
               key={cat.name}
               component={Link}
-              href={cat.href}
+              href={`/products/?c=${cat.slug}`}
               onClick={toggleDrawer}
               sx={{
                 transition: "all 0.2s ease",
@@ -320,6 +354,7 @@ export default function Header() {
               </Typography>
             </ListItemButton>
           ))}
+
         </Box>
       </Drawer>
     </>

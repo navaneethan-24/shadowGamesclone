@@ -1,17 +1,77 @@
-export interface ProductCategoryType {
-  id: number;
-  name: string;
-  price: number;
-  platform: string;
-  image: string;
+export interface VariantItem {
+  isDefault: boolean;
+  unitPrice: number;
+  mrPrice: number;
+  optionSet1?: string;
 }
-export type ProductCondition = "new" | "used" | "new-open-box";
 
-export interface ProductCardType {
-  id: number;
+export interface Product {
+  _id: string;
+  name: string;
+  defaultImage?: {
+    relativePath: string;
+  };
+  variants?: {
+    items?: VariantItem[];
+  };
+}
+
+export interface Category {
+  _id: string;
+  name: string;
+  image?: string;
+  slug?: string;
+  displayOrder?: string;
+  parentId?: string | null;
+  items?: Category[];
+  defaultImage?: { relativePath: string };
+  fullImageUrl?: string;
+  href: string;
+}
+
+
+export type ProductCardType = {
+  id: string;
   imgSrc: string;
   title: string;
   price: number;
   oldPrice?: number;
-  tag: ProductCondition;
+  tag?: string;
+  categoryIds?: string[];
+  selectedCategoryId?: string;
+  inStock?: boolean; 
+};
+
+
+export interface FeaturedProduct {
+  name: string;
+  products: {
+    productId: string;
+  }[];
+}
+
+export interface FeaturedProductsResponse {
+  items: FeaturedProduct[];
+}
+
+export type CartItem = {
+  _id: string;
+  title: string;
+  image?: string;
+  price: number;
+  mrPrice?: number;
+
+  variantId?: string;
+  optionSet1?: string;
+  optionSet2?: string;
+
+  qty: number;
+};
+
+
+export type CartContextType = {
+    cart: CartItem[];
+    addToCart: (item: CartItem) => void;
+    removeFromCart: (item: CartItem) => void;
+    updateQty: (item: CartItem, qty: number) => void;
 }

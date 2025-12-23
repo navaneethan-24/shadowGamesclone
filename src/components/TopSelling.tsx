@@ -1,81 +1,104 @@
-"use client"
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+"use client";
+import { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import { HeroBtn } from "./ui/buttons";
 import ProductCard from "./ProductCard";
-import { products } from "@/data/products";
 import Link from "next/link";
 import Scrollbtn from "./ui/Scrollbtn";
-import { useRef, useEffect, useState } from "react";
+import Carousel from "react-multi-carousel";
+import { postData, getData } from "@/utils/api";
+import { ProductCardType } from "@/types";
+import { useRouter } from "next/navigation";
 
 export default function TopSellings() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const theme = useTheme();
-  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
-  const gap = 8;
-  const [cardWidth, setCardWidth] = useState(150);
+  const [products, setProducts] = useState<ProductCardType[]>([]);
+  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+
+  const getTopSelling = async () => {
+    try {
+      const res = await postData<{ items: any[] }>(
+        "collections/featured-products/query",
+        { data: { filter: {} } }
+      );
+      const topSelling = res.items.find(
+        (item) => item.name === "Top Selling Controllers"
+      );
+      if (!topSelling) return;
+
+      const productIds = topSelling.products.map((p: any) => p.productId);
+      const productResponses = await Promise.all(
+        productIds.map((id: string) => getData(`products/${id}`))
+      );
+
+
+      const mapped = productResponses.map((res: any) => {
+        const p = res.data || res;
+        const defaultVariant =
+          p.variants?.items?.find((v: any) => v.isDefault) || {};
+        const imgSrc = `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}${p.defaultImage?.relativePath || ""}`;
+
+        return {
+          id: p._id,
+          imgSrc: imgSrc,
+          title: p.name,
+          price: defaultVariant.unitPrice ?? p.unitPrice ?? 0,
+          oldPrice: defaultVariant.mrPrice ?? p.unitPrice ?? 0,
+          tag: defaultVariant.optionSet1 || "",
+          inStock: p.variants?.items?.some((v: any) => Number(v.stockInHand) > 0) || false,
+          categoryIds: p.categoryIds?.map((cat: any) => (typeof cat === "string" ? cat : cat.id || cat._id)).filter(Boolean) || [],
+          selectedCategoryId: p.selectedCategoryId || "",
+
+        } as ProductCardType;
+      });
+
+      setProducts(mapped);
+    } catch (err) {
+      console.error("Failed to fetch Top Selling Controllers:", err);
+    }
+  };
+
   useEffect(() => {
-    const calcWidth = () => {
-      if (!containerRef.current) return;
-      const containerWidth = containerRef.current.offsetWidth;
-      const cardsPerRow = isMdUp ? 4 : 2; 
-      const newWidth = (containerWidth - (cardsPerRow - 1) * gap) / cardsPerRow;
-      setCardWidth(newWidth);
-    };
-    calcWidth();
-    window.addEventListener("resize", calcWidth);
-    return () => window.removeEventListener("resize", calcWidth);
-  }, [isMdUp]);
+    getTopSelling();
+    setMounted(true);
+  }, []);
 
-  const scrollAmount = cardWidth + gap;
-  const loopProducts = [...products, ...products];
-
-  const checkLoop = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, scrollWidth } = scrollRef.current;
-    const totalWidth = scrollWidth / 2;
-    if (scrollLeft <= 0) scrollRef.current.scrollLeft += totalWidth;
-    else if (scrollLeft >= totalWidth)
-      scrollRef.current.scrollLeft -= totalWidth;
+  const responsive = {
+    superLargeDesktop: { breakpoint: { max: 3000, min: 1300 }, items: 9 },
+    largeDesktop: { breakpoint: { max: 1300, min: 1200 }, items: 8 },
+    desktop: { breakpoint: { max: 1200, min: 900 }, items: 7 },
+    tablet: { breakpoint: { max: 900, min: 700 }, items: 5 },
+    smallTablet: { breakpoint: { max: 700, min: 600 }, items: 4 },
+    mobile: { breakpoint: { max: 600, min: 0 }, items: 2 },
   };
 
-  const scrollLeft = () => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    setTimeout(checkLoop, 300);
-  };
-
-  const scrollRight = () => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    setTimeout(checkLoop, 300);
-  };
+  const CustomLeftArrow = ({ onClick }: { onClick?: () => void }) => (
+    <Scrollbtn direction="left" onClick={onClick!} top="50%" />
+  );
+  const CustomRightArrow = ({ onClick }: { onClick?: () => void }) => (
+    <Scrollbtn direction="right" onClick={onClick!} top="50%" />
+  );
 
   return (
-    <Box sx={{ width: "100%", mx: "auto", px: 1, mt: 2, position: "relative" }}>
-      {/* Heading and viewall btn */}
+    <Box sx={{ width: "100%", mx: "auto", px: 1,   }}>
+      {/* Heading */}
       <Box
-        ref={scrollRef}
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          width: "100%",
           mb: { xs: 1, md: 2 },
         }}
       >
         <Box>
-          <Typography fontWeight={800} color="#019cfa"
+          <Typography
+            fontWeight={800}
             sx={{
               fontSize: { xs: "18px", md: "24px" },
               color: "#019cfa",
-              textShadow: `0 0 0.5px #019cfa,
-                        0 0 2px #019cfa,
-                        0 0 4px #00f,
-                        0 0 5px #00f
-                        `,
+              textShadow: `0 0 0.5px #019cfa,0 0 2px #019cfa,0 0 4px #00f,0 0 5px #00f`,
               letterSpacing: "1.5px",
-              mb: 1
+              mb: 1,
             }}
           >
             Top Selling Controllers
@@ -83,38 +106,39 @@ export default function TopSellings() {
           <Box
             sx={{
               height: "1px",
-              width: "50% ",
+              width: "50%",
               background: "linear-gradient(90deg, #6a1121 8%, #07568e 100%)",
               mb: 1,
             }}
           ></Box>
         </Box>
-        <HeroBtn text="VIEW ALL" />
+        <HeroBtn text="VIEW ALL"
+          onClick={() => router.push("/products?c=controllers")} />
       </Box>
 
-      {/* Porduct cart */}
+      {/* Carousel */}
       <Box sx={{ position: "relative" }}>
-        <Scrollbtn direction="left" onClick={scrollLeft} />
-        <Scrollbtn direction="right" onClick={scrollRight} />
-
-        <Box ref={scrollRef} onScroll={checkLoop}
-          sx={{
-            display: "flex",
-            overflowX: "auto",
-            gap: 1.2,
-            "&::-webkit-scrollbar": { height: 6 },
-          }}
+        <Carousel
+          responsive={responsive}
+          infinite
+          autoPlay={false}
+          keyBoardControl
+          containerClass="carousel-container"
+          customLeftArrow={<CustomLeftArrow />}
+          customRightArrow={<CustomRightArrow />}
         >
-          {loopProducts.map((product) => (
-            <Link
-              key={product.id}
-              href={`/product/${product.id}`}
-              style={{ textDecoration: "none" }}
-            >
-              <ProductCard product={product} />
-            </Link>
+          {products.map((product, idx) => (
+            <Box key={idx} sx={{ mx: 0.5, minWidth: 150, minHeight: 300 }}>
+              <Link
+                href={`/product-detail?id=${product.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <ProductCard product={product} />
+              </Link>
+
+            </Box>
           ))}
-        </Box>
+        </Carousel>
       </Box>
     </Box>
   );

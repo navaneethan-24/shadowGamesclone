@@ -4,22 +4,32 @@ import { Button } from "@mui/material";
 interface HeroBtnProps {
   text: string;
   onClick?: () => void;
+  borderRadius?: string;
+  padding?: string;
 }
 
-export function HeroBtn({ text,onClick} : HeroBtnProps) {
+export function HeroBtn({
+   text,
+   onClick,
+   borderRadius = "15px",
+   padding = "4px 18px"
+} : HeroBtnProps) {
   return (
     <Button
       onClick={onClick}
+      className="font-500 text-13 text-white"
       sx={{
-        fontSize: "14px",
-        fontWeight: 800,
-        color: "#e7ebee",
-        borderRadius: "50px",
-        background: "radial-gradient(circle at top left, #862c47ff 5%, #07568e 70%)",
+        fontFamily: "'Poppins', 'Open Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
+        fontWeight: 500,
+        fontSize: "13px",
+        lineHeight: "23px",
+        color: "rgb(255,255,255)",
+        borderRadius,
+        background: "radial-gradient(circle at top left, #862c47ff 5%, #07568e 90%)",
         textTransform: "none",
-        padding: "4px 18px",
+        padding,
         "&:hover": { background: "#07568e" },
-      }}
+      }}  
     >
      {text}
     </Button>

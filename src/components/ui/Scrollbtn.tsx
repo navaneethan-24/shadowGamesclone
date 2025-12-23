@@ -12,8 +12,8 @@ interface ScrollbtnProps {
 export default function Scrollbtn({
   direction = "left",
   onClick,
-  size = 60,
-  top = "50%",
+  size = 70,
+  top = "70%",
 }: ScrollbtnProps) {
   const src = direction === "left" ? "/images/l-arrow.png" : "/images/r-arrow.png";
 
@@ -23,8 +23,8 @@ export default function Scrollbtn({
       sx={{
         position: "absolute",
         top: top,
-        [direction]: 5,
-        transform: "translateY(-50%)",
+        [direction]: -10 ,
+        transform: "translateY(-100%)",
         zIndex: 10,
         cursor: "pointer",
        
