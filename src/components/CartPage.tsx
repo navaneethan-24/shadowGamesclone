@@ -1,27 +1,44 @@
-"use Client"
+"use  client"
 
 import { Box, Divider, Typography } from "@mui/material";
 import Link from "next/link";
 import { useCart } from "./CartContext";
 import type { CartItem } from "@/types";
 import { HeroBtn } from "./ui/buttons";
-
-
-
+import { useRouter } from "next/navigation";
 
 
 export default function CartPage() {
-    const { cart: contextCart, updateQty, removeFromCart } = useCart();
+    const router = useRouter();
+    const { cart: contextCart, updateQty, removeFromCart, setOrder } = useCart();
+    const { subtotal, discount, totalAmount } = contextCart.reduce((acc, item) => {
+        const price = item.price * item.qty;
+        const mrPrice = item.mrPrice ? item.mrPrice * item.qty : 0;
 
-    const subtotal = contextCart.reduce((sum, item) => sum + ((item.mrPrice || item.price) * item.qty), 0);
-    const discount = contextCart.reduce((sum, item) => sum + (((item.mrPrice || item.price) - item.price) * item.qty), 0);
-    const totalAmount = contextCart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        acc.subtotal += price;
+        acc.discount += mrPrice - price; 
+
+        return acc;
+    }, { subtotal: 0, discount: 0, totalAmount: 0 });
+
+    const finalTotal = Math.max(subtotal - discount, 0);
+
+    const handleCheckout = () => {
+        setOrder({
+            items: contextCart,
+            subtotal,
+            discount,
+            totalAmount,
+        });
+
+        router.push("/order-confirmation");
+    };
+
 
 
 
     return (
         <Box sx={{ width: "100%", py: 2, px: 2 }}>
-
             <Box sx={{
                 display: "flex", flex: "row", gap: 1, mb: 4,
                 mt: { xs: 6, md: 0 }
@@ -38,9 +55,6 @@ export default function CartPage() {
                 </Typography>
 
             </Box>
-
-
-
             {contextCart.length === 0 ? (
                 <Typography> NO ITEMS TO SHOW </Typography>
             ) : (
@@ -73,16 +87,13 @@ export default function CartPage() {
                         >
                             <Typography sx={{ color: "#009AFF" }}>Buy</Typography>
                         </Box>
-
-
                     </Box>
                     <Box sx={{ display: 'flex', flexDirection: { xs: "column", md: "row" }, gap: 5 }}>
                         {/* purchase card */}
                         <Box sx={{ width: { xs: "100%", md: "70%" }, mt: 2 }}>
-
                             {contextCart.map((item: CartItem) => (
                                 <Box
-                                    key={item._id}
+                                    key={item.key}
                                     sx={{
                                         display: "flex",
                                         gap: 3,
@@ -101,9 +112,7 @@ export default function CartPage() {
                                         display: "flex", flexDirection: "column", width: "100%",
                                     }}>
                                         <Box sx={{
-                                            display: "flex", justifyContent: "space-between", gap: 3,
-
-                                            alignItems: "center",
+                                            display: "flex", justifyContent: "space-between", gap: 3, alignItems: "center",
                                         }}>
                                             {/* Image */}
                                             <Box sx={{
@@ -119,30 +128,30 @@ export default function CartPage() {
                                             <Box sx={{ width: "100%", ml: 0, }}>
                                                 <Typography sx={{ color: "EDEDED", fontSize: { xs: "12px", md: "15px" }, alignContent: "start", mb: 1 }}>{item.title}</Typography>
                                                 <Box>
-                                                    <Box sx={{ display: "flex",  gap: 1 }} >
-                                                        { item.optionSet1 && (
-                                                        <Box sx={{ display: { xs: "none", md: "inline-block" }, borderRadius: "15px", border: "1px solid #2a3441", mb: 2 }}>
-                                                            <Typography sx={{ fontSize: "12px", color: "#89868d", px: 1, }}>
-                                                             
+                                                    <Box sx={{ display: "flex", gap: 1 }} >
+                                                        {item.optionSet1 && (
+                                                            <Box sx={{ display: { xs: "none", md: "inline-block" }, borderRadius: "15px", border: "1px solid #2a3441", mb: 2 }}>
+                                                                <Typography sx={{ fontSize: "12px", color: "#89868d", px: 1, }}>
+
                                                                     {item.optionSet1.charAt(0).toUpperCase() +
-                                                                    item.optionSet1?.slice(1).toLowerCase()}
-                                                                
-                                                            </Typography >
-                                                        </Box>
+                                                                        item.optionSet1?.slice(1).toLowerCase()}
+
+                                                                </Typography >
+                                                            </Box>
                                                         )}
                                                         {item.optionSet2 && (
-                                                            
-        
-                                                        <Box sx={{ display: { xs: "none", md: "inline-block" }, borderRadius: "15px", border: "1px solid #2a3441", mb: 2 }}>
-                                                            <Typography sx={{ fontSize: "12px", color: "#89868d", px: 1, }}>
-                                                                {
-                                                                   item.optionSet2.charAt(0).toUpperCase() +
-                                                                    item.optionSet2?.slice(1).toLowerCase()
-                                                                
-                                                                }
-                                                            </Typography >
-                                                        </Box>
-                                                        )}  
+
+
+                                                            <Box sx={{ display: { xs: "none", md: "inline-block" }, borderRadius: "15px", border: "1px solid #2a3441", mb: 2 }}>
+                                                                <Typography sx={{ fontSize: "12px", color: "#89868d", px: 1, }}>
+                                                                    {
+                                                                        item.optionSet2.charAt(0).toUpperCase() +
+                                                                        item.optionSet2?.slice(1).toLowerCase()
+
+                                                                    }
+                                                                </Typography >
+                                                            </Box>
+                                                        )}
                                                     </Box>
                                                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                                                         <Typography sx={{
@@ -150,28 +159,28 @@ export default function CartPage() {
                                                                 xs: "none", md: "block",
                                                                 order: 0
                                                             }
-                                                        }}> Unit Price:
+                                                        }}> Unit Price :
 
                                                         </Typography>
                                                         <Typography component="span" sx={{
-                                                            color: "#FFFFF",
+                                                            color: "#FFFFFF",
                                                             fontSize: "13px",
                                                             order: { xs: 1, md: 0 }
-                                                        }}>₹{item.price}
+                                                        }}>₹{" "}{item.price}
                                                         </Typography>
 
                                                         <Typography sx={{
                                                             color: "#89868d",
                                                             fontSize: "13px",
                                                             display: { xs: "none", md: "block" }
-                                                        }}> MRP:
+                                                        }}> MRP :
                                                         </Typography>
                                                         <Typography component="span" sx={{
                                                             color: "#89868d",
                                                             textDecoration: "line-through",
-                                                            fontSize: "11px",
+                                                            fontSize: "13px",
                                                             order: 0,
-                                                        }}>₹{item.mrPrice}
+                                                        }}>₹{" "}{item.mrPrice}
                                                         </Typography>
                                                         <Typography sx={{
                                                             color: "#009AFF",
@@ -284,18 +293,11 @@ export default function CartPage() {
                                                     order: { xs: 1, md: 0 }
                                                 }}> ₹{item.price}
                                                 </Typography>
-
-
                                             </Box>
-
-
                                         </Box>
                                     </Box>
                                 </Box>
-
-
                             ))}
-
                         </Box>
 
                         {/* Bill card */}
@@ -303,7 +305,7 @@ export default function CartPage() {
                             display: 'flex',
                             flexDirection: "column",
                             width: { xs: "100%", md: "30%", },
-                            height:"auto",
+                            height: "auto",
                             alignSelf: "flex-start",
                             mt: 1,
                             p: 5,
@@ -312,18 +314,19 @@ export default function CartPage() {
                             backdropFilter: "blur(10px)",
                             WebkitBackdropFilter: "blur(10px)",
                         }}>
-                            <Box sx={{ width: "100%", maxHeight:"280px", mb: 2,  }}>
+                            <Box sx={{ width: "100%", maxHeight: "280px", mb: 2, }}>
                                 <Typography sx={{ textAlign: "center" }}>Price Details</Typography></Box>
                             <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-evenly", }}>
                                 <Box>
                                     <Box sx={{ display: "flex", width: "100%", flexDirection: "row", mb: 2 }}>
                                         <Typography sx={{ flex: 1, fontSize: { md: "14px", xs: "12px" } }}>Subtotal</Typography>
-                                        <Typography sx={{ color: "#009aff" }}>{subtotal}
+                                        <Typography sx={{ color: "secondary.main", fontSize: { md: "14px", xs: "12px" } }}>
+                                            {"\u20B9"} {subtotal}
                                         </Typography>
                                     </Box>
                                     <Box sx={{ display: "flex", flexDirection: "row", mb: 2 }}>
                                         <Typography sx={{ flex: 1, fontSize: { md: "14px", xs: "12px" } }}>Discount</Typography>
-                                        <Typography sx={{ color: "#009aff" }}>{discount}</Typography>
+                                        <Typography sx={{ color: "#009aff" }}>-{"\u20B9"} {discount}</Typography>
                                     </Box>
                                     <Box sx={{ display: "flex", flexDirection: "row", mb: 2 }}>
                                         <Typography sx={{ flex: 1, fontSize: { md: "14px", xs: "12px" }, textWrap: "nowrap" }}>Delivery Charges</Typography>
@@ -333,13 +336,13 @@ export default function CartPage() {
                                     <Divider sx={{ borderColor: "#009aff", borderWidth: "2px", mb: 2 }} />
 
                                     <Box sx={{ display: "flex", flexDirection: "row", mb: 2 }}>
-                                        <Typography sx={{ flex: 1, textWrap: "nowrap" }}>Total Amount </Typography>
-                                        <Typography sx={{ color: "#009aff" }}>{totalAmount} </Typography>
+                                        <Typography sx={{ flex: 1, textWrap: "nowrap", }}>Total Amount </Typography>
+                                        <Typography sx={{ color: "secondary.main" }}>{"\u20B9"} {finalTotal} </Typography>
                                     </Box>
                                 </Box>
                                 <Box sx={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center", }}>
                                     <HeroBtn text="CHECKOUT" borderRadius="12px"
-                                        padding="10px" />
+                                        padding="10px" onClick={handleCheckout} />
 
                                     <Link href={{
                                         pathname: `/products`,
@@ -351,8 +354,6 @@ export default function CartPage() {
 
 
                         </Box>
-
-
                     </Box>
 
                 </Box>

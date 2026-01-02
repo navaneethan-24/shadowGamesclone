@@ -5,6 +5,7 @@ interface HeroBtnProps {
   text: string;
   onClick?: () => void;
   borderRadius?: string;
+  width?:string;
   padding?: string;
 }
 
@@ -12,7 +13,8 @@ export function HeroBtn({
    text,
    onClick,
    borderRadius = "15px",
-   padding = "4px 18px"
+   padding = "4px 18px",
+   width = "auto",
 } : HeroBtnProps) {
   return (
     <Button
@@ -22,6 +24,7 @@ export function HeroBtn({
         fontFamily: "'Poppins', 'Open Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
         fontWeight: 500,
         fontSize: "13px",
+        width,
         lineHeight: "23px",
         color: "rgb(255,255,255)",
         borderRadius,

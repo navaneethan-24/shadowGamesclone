@@ -7,7 +7,7 @@ export async function postData<T = any>(endpoint: string, body: any = {}): Promi
   
   if (!BASE) throw new Error("NEXT_PUBLIC_API_BASE_URL missing");
     
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`, {
+  const res = await fetch(`${BASE}${endpoint}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),  
@@ -20,7 +20,7 @@ export async function postData<T = any>(endpoint: string, body: any = {}): Promi
 }
 
 export async function getData<T = any>(endpoint: string): Promise<T> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}`, {
+  const res = await fetch(`${BASE}${endpoint}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
     cache: "no-store",

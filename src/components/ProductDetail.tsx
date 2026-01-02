@@ -38,9 +38,9 @@ export default function ProductDetail({ product }: { product: any }) {
   const [selectedoptionSet2, setSelectedoptionSet2] = useState(defaultVariant?.optionSet2 || "");
   const [selectedVariant, setSelectedVariant] = useState<any>(defaultVariant);
   const router = useRouter();
-  const {addToCart} = useCart();
- 
-  
+  const { addToCart } = useCart();
+
+
 
   //  optionSet1 
   const uniqueOptionSet1 = Array.from(
@@ -120,10 +120,10 @@ export default function ProductDetail({ product }: { product: any }) {
     selectedVariant.isOutOfStock ||
     (!Number(selectedVariant.stockInHand) && !Number(product.stockInHand))
 
-  const  handleAddToCart = () => {
-    if(!selectedVariant) return;
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
 
-    const cartItem =  {
+    const cartItem = {
       _id: product._id,
       title: product.name,
       image: imgUrl,
@@ -133,7 +133,7 @@ export default function ProductDetail({ product }: { product: any }) {
       variantId: selectedVariant._id,
       optionSet1: selectedVariant.optionSet1,
       optionSet2: selectedVariant.optionSet2,
-
+      key: `${product._id}-${selectedVariant._id}-${selectedVariant.optionSet1}-${selectedVariant.optionSet2}`,
       qty: 1,
     };
 
@@ -256,11 +256,11 @@ export default function ProductDetail({ product }: { product: any }) {
           mb: 2,
         }}
       >
-        <Box sx={{ display:"flex", gap: 1, alignItems:"center"}}>
-        <Link href={`/products`}
-          style={{ textDecoration: "none" }}>
-          <Typography sx={{ fontSize: "15px",color: "#186cb4" }}>Products</Typography>
-        </Link >
+        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+          <Link href={`/products`}
+            style={{ textDecoration: "none" }}>
+            <Typography sx={{ fontSize: "15px", color: "#186cb4" }}>Products</Typography>
+          </Link >
           <Typography sx={{ fontSize: "18px" }}> / </Typography>
           <Typography sx={{
             fontSize: "13px", color: "#b0c0cf",
@@ -272,10 +272,10 @@ export default function ProductDetail({ product }: { product: any }) {
             {product.name}
           </Typography>
         </Box>
-      
+
       </Box>
 
-    
+
 
 
 
@@ -439,7 +439,7 @@ export default function ProductDetail({ product }: { product: any }) {
             ) : null}
 
             {/* MAIN IMAGE */}
-            <Box sx={{ p: 0, m: 0, bgcolor:"pink" }}>
+            <Box sx={{ p: 0, m: 0, }}>
               <Image
                 src={imgUrl}
                 alt={product.name}
@@ -558,13 +558,29 @@ export default function ProductDetail({ product }: { product: any }) {
                   product.variants?.items?.some((item: any) => item.optionSet2 &&
                     item.optionSet2.trim() !== "") && (
                     <Box sx={{ my: 2 }}>
-                      <FormControl sx={{ width: { xs: "100%", md: "400px" } }}>
+                      <FormControl sx={{ width: { xs: "100%", md: "350px" } }}>
                         <Select
                           value={selectedoptionSet2}
                           onChange={handleoptionSet2Change}
                           displayEmpty
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                bgcolor: "#FFFFFF",
+                                color: "#000000ff",
+                                "& .MuiMenuItem-root": {
+                                  color: "#000000ff",
+                                },
+                                "& .MuiMenuItem-root.Mui-selected": {
+                                  bgcolor: "#058ae9ff 70%",
+                                },
+                                "& .MuiMenuItem-root:hover": {
+                                  bgcolor: "#058ae9ff 50%",
+                                },
+                              },
+                            },
+                          }}
                           sx={{
-
                             color: "#fff",
                             borderRadius: "8px",
                             height: "48px",
@@ -602,10 +618,10 @@ export default function ProductDetail({ product }: { product: any }) {
                   )}
 
 
-                <Typography sx={{ fontSize: { xs:"16px" , md:"24px"}, fontWeight: "600", mb: 4 }}>
+                <Typography sx={{ fontSize: { xs: "16px", md: "24px" }, fontWeight: "600", mb: 4 }}>
                   {product.name}
                 </Typography>
-                <Typography sx={{ fontSize: { xs:"17px" , md:"24px"}, fontWeight: "700", mb: 2 }}>
+                <Typography sx={{ fontSize: { xs: "17px", md: "24px" }, fontWeight: "700", mb: 2 }}>
                   ₹ {selectedVariant?.unitPrice ?? product.unitPrice ?? 0}
                 </Typography>
 
@@ -658,7 +674,7 @@ export default function ProductDetail({ product }: { product: any }) {
                     text="Add to Cart"
                     padding="8px 48px"
                     borderRadius="8px"
-                    
+
                     onClick={handleAddToCart}
                   />
                 )}
@@ -702,7 +718,6 @@ export default function ProductDetail({ product }: { product: any }) {
             </Box>
             <Box
               sx={{
-
                 fontSize: "14px",
                 fontWeight: "400",
                 lineHeight: 1.6,
@@ -810,7 +825,7 @@ export default function ProductDetail({ product }: { product: any }) {
                 }}
               >
                 <Typography
-                  
+
                   sx={{
                     fontSize: "24px",
                     fontWeight: 800,

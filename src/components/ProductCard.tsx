@@ -97,6 +97,8 @@ export default function ProductCard({ product, width }: Props) {
             src={product.imgSrc}
             alt={product.title}
             fill
+            sizes="100%"
+            priority
             style={{
               objectFit: "contain",
               padding: "8px",

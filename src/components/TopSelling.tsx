@@ -80,17 +80,17 @@ export default function TopSellings() {
   );
 
   return (
-    <Box sx={{ width: "100%", mx: "auto", px: 1,   }}>
+    <Box sx={{ width: "100%", px: 1, mt: 10 ,  }}>
       {/* Heading */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: { xs: 1, md: 2 },
+          mb: { xs: 3, md: 4 },
         }}
       >
-        <Box>
+        <Box> 
           <Typography
             fontWeight={800}
             sx={{
@@ -98,7 +98,7 @@ export default function TopSellings() {
               color: "#019cfa",
               textShadow: `0 0 0.5px #019cfa,0 0 2px #019cfa,0 0 4px #00f,0 0 5px #00f`,
               letterSpacing: "1.5px",
-              mb: 1,
+          
             }}
           >
             Top Selling Controllers
@@ -108,7 +108,7 @@ export default function TopSellings() {
               height: "1px",
               width: "50%",
               background: "linear-gradient(90deg, #6a1121 8%, #07568e 100%)",
-              mb: 1,
+          
             }}
           ></Box>
         </Box>

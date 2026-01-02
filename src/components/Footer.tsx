@@ -76,6 +76,8 @@ const Footer: React.FC = () => {
                 src="/images/sglogo.png"
                 alt="ShadowGames Logo"
                 fill
+                sizes="100%"
+                priority
                 style={{ objectFit: "contain" }}
               />
             </Box>

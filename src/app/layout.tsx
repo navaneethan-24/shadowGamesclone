@@ -10,6 +10,9 @@ import FloatingSocialIcons from "@/components/ui/FlotingSocialIcons";
 import PageLoader from "@/components/ui/PageLoader";
 import { usePathname } from "next/navigation";
 import { CartProvider } from "@/components/CartContext";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "@/theme/theme";
+
 
 export const poppins = Poppins({
   subsets: ['latin'],
@@ -27,6 +30,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={poppins.variable}>
       <body>
+        <ThemeProvider theme={theme}>
         <CartProvider>
         <Header />
         {showheroCategory && <HeroCategory />}
@@ -43,6 +47,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <Footer />
         <FloatingSocialIcons/>
         </CartProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

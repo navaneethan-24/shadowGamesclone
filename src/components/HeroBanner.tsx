@@ -87,6 +87,8 @@ export default function HeroBanner() {
                       src={panel.fullImageUrl}
                       alt={panel.title || `banner-${id}`}
                       fill
+                      sizes="100%"
+                      priority
                       style={{ objectFit: "contain" }}
                     />
                     )}

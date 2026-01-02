@@ -2,13 +2,13 @@
   "name": "shadowgames",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
-  },
-  "dependencies": {
+"scripts": {
+  "dev": "next dev --turbopack & npx open http://localhost:3000",
+  "build": "next build --turbopack",
+  "start": "next start",
+  "lint": "eslint"
+},
+"dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.2",

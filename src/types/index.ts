@@ -39,7 +39,7 @@ export type ProductCardType = {
   tag?: string;
   categoryIds?: string[];
   selectedCategoryId?: string;
-  inStock?: boolean; 
+  inStock?: boolean;
 };
 
 
@@ -60,18 +60,28 @@ export type CartItem = {
   image?: string;
   price: number;
   mrPrice?: number;
-
   variantId?: string;
   optionSet1?: string;
   optionSet2?: string;
-
+  key: string;
   qty: number;
 };
 
 
+
 export type CartContextType = {
-    cart: CartItem[];
-    addToCart: (item: CartItem) => void;
-    removeFromCart: (item: CartItem) => void;
-    updateQty: (item: CartItem, qty: number) => void;
+  cart: CartItem[];
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (item: CartItem) => void;
+  updateQty: (item: CartItem, qty: number) => void;
+  order: OrderData | null
+  setOrder: (order: OrderData | null) => void
+
+}
+
+export type OrderData = {
+  items: CartItem[]
+  subtotal: number
+  discount: number
+  totalAmount: number
 }

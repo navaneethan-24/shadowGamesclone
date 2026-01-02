@@ -1,10 +1,33 @@
 {
-    "claudeCodeChat.permissions.yoloMode": true,
-    "editor.inlineSuggest.edits.showCollapsed": true,
-    "github.copilot.chat.alternateGptPrompt.enabled": true,
-    "github.copilot.advanced": {
-        
-    },
-    "liveServer.settings.multiRootWorkspaceName": "shadowgames",
-    "editor.suggest.shareSuggestSelections": true
+  /* ===== Empty Indent ===== */
+  "emptyIndent.removeIndent": true,
+  "emptyIndent.highlightIndent": false,
+  "emptyIndent.highlightColor": "rgba(246,36,89,0.6)",
+  "emptyIndent.exclude": [".sm"],
+
+  /* ===== AI / Copilot / Claude ===== */
+  "github.copilot.chat.alternateGptPrompt.enabled": true,
+  "github.copilot.advanced": {},
+  "editor.inlineSuggest.edits.showCollapsed": true,
+
+  /* ===== Suggestions & Focus ===== */
+  "editor.suggest.shareSuggestSelections": true,
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": false
+  },
+
+  /* ===== JS / TS / React ===== */
+  "typescript.suggest.autoImports": true,
+  "javascript.suggest.autoImports": true,
+  "typescript.preferences.jsxAttributeCompletionStyle": "auto",
+
+  /* ===== Live Server ===== */
+  "liveServer.settings.multiRootWorkspaceName": "shadowgames"
+
+
+
+
 }

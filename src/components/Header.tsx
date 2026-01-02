@@ -107,6 +107,7 @@ export default function Header() {
                 <Image
                   src="/images/sglogo.png"
                   alt="ShadowGames Logo"
+                  priority
                   width={287}
                   height={55}
                   style={{ width: "100%", height: "auto" }}
